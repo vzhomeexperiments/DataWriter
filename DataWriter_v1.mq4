@@ -1,12 +1,11 @@
 //+------------------------------------------------------------------+
 //|                                                   DataWriter.mq4 |
 //|                                 Copyright 2016, Vladimir Zhbanko |
-//|                                       vladimir.zhbanko@gmail.com |
 //+------------------------------------------------------------------+
 #include <06_NormalizeDouble.mqh>
 
-#property copyright "Copyright 2016, Vladimir Zhbanko"
-#property link      "vladimir.zhbanko@gmail.com"
+#property copyright "Copyright 2018, Vladimir Zhbanko"
+#property link      "https://vladdsm.github.io/myblog_attempt/"
 #property version   "1.00"
 #property strict
 
@@ -14,8 +13,8 @@ int handle;
 string fileName, header, data;
 
 /*
-PURPOSE: 
-USE:
+PURPOSE: Writing price of an asset on the M1 chart
+USE: Attach to the asset chart with period M1
 */
 
 //+------------------------------------------------------------------+

@@ -1,17 +1,16 @@
 //+------------------------------------------------------------------+
 //|                                                   DataWriter.mq4 |
-//|                                 Copyright 2017, Vladimir Zhbanko |
-//|                                       vladimir.zhbanko@gmail.com |
+//|                                 Copyright 2018, Vladimir Zhbanko |
 //+------------------------------------------------------------------+
 #include <06_NormalizeDouble.mqh>
 
-#property copyright "Copyright 2017, Vladimir Zhbanko"
-#property link      "vladimir.zhbanko@gmail.com"
+#property copyright "Copyright 2018, Vladimir Zhbanko"
+#property link      "https://vladdsm.github.io/myblog_attempt/"
 #property version   "3.01"
 #property strict
 
 /*
-PURPOSE: 
+PURPOSE: Write result of All Powers Custom Indicator
 USE:
 */
 
