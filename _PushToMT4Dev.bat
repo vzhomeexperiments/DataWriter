@@ -4,9 +4,10 @@ rem Use in case some content needs to be replaced (reverted from Version Control
 @echo off
 setlocal enabledelayedexpansion
 
-set SOURCE_DIR="C:\Users\fxtrams\Documents\000_TradingRepo\Include"
-set DEST_DIR="C:\Program Files (x86)\FxPro - Terminal2\MQL4\Include"
+:: Source Directory where Version Control Repository is located
+set SOURCE_DIR="C:\Users\fxtrams\Documents\000_TradingRepo\DataWriter"
+:: Destination Directory where Expert Advisor is located
+set DEST_DIR="C:\Program Files (x86)\FxPro - Terminal2\MQL4\Experts\01_DataWriter"
 
-ROBOCOPY %SOURCE_DIR% %DEST_DIR% *.mqh
+ROBOCOPY %SOURCE_DIR% %DEST_DIR% *.mq4
 
-pause
