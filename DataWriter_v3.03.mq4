@@ -10,7 +10,7 @@
 #property strict
 
 /*
-PURPOSE: 
+PURPOSE: This EA writes past data on prices for 28 currencies as well as power indicator
 USE:
 */
 
