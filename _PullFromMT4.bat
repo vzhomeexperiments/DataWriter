@@ -9,4 +9,4 @@ set SOURCE_DIR="C:\Program Files (x86)\FxPro - Terminal2\MQL4\Experts\01_DataWri
 set DEST_DIR="C:\Users\fxtrams\Documents\000_TradingRepo\DataWriter"
 
 :: Copy only files with *.mq4 extension
-ROBOCOPY %SOURCE_DIR% %DEST_DIR% *.mq4
+ROBOCOPY %SOURCE_DIR% %DEST_DIR% DataWriter_v4.01.mq4
