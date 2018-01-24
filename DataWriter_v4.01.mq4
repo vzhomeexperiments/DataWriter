@@ -23,7 +23,7 @@ https://www.udemy.com/your-trading-robot/?couponCode=LAZYTRADE-GIT
 extern string  Header1 = "-----EA Main Settings-------";
 extern int     UseBarsHistory        = 7300;
 extern int     UseBarsCollect        = 7200;    
-extern int     chartPeriod           = 15;
+extern int     chartPeriod           = 15; //min
 
 
 string FileNamePrx1 = "AI_CP";
@@ -38,8 +38,8 @@ string FileNameMacd = "AI_Macd";
 
 /*
 Content:
-1. Function writeDataPow         collect Power Data         Line 106
-2. Function writeDataCP          collect Close Price data   Line 189
+
+2. Function writeDataCP          collect Close Price data   
 3. Function writeDataOP          collect Open Price data
 4. Function writeDataLP          collect Low Price data
 5. Function writeDataHP          collect High Price data
@@ -80,7 +80,7 @@ void OnTick()
        {
       //  record time to variable
       Time0 = Time[0];
-      //code that only executed once
+      //code that only executed in the beginning and once every bar
        //record closed price data
       writeDataCP(FileNamePrx1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record open price data
@@ -90,7 +90,7 @@ void OnTick()
       //record low price data
       //writeDataLP(FileNamePrx4 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record rsi indicator data
-      //writeDataRSI(FileNameRsi1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      writeDataRSI(FileNameRsi1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record bull power data
       //writeDataBullPow(FileNameBull + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record bear power data
