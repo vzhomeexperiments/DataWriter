@@ -35,6 +35,7 @@ string FileNameBull = "AI_BullPow";
 string FileNameBear = "AI_BearPow";
 string FileNameAtr1 = "AI_Atr8";
 string FileNameMacd = "AI_Macd";
+string FileNameStoch = "AI_Stoch";
 
 /*
 Content:
@@ -99,6 +100,8 @@ void OnTick()
       //writeDataAtr(FileNameAtr1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
       //record macd data
       writeDataMacd(FileNameMacd + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      //record Stochastic data
+      writeDataStoch(FileNameStoch + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
       }
       
   }
@@ -834,10 +837,10 @@ datetime TIME;  //Time index
                      
                      usdcad = iMACD("USDCAD",chartPeriod, 12, 26, 9, 0, 0, j);
                      usdchf = iMACD("USDCHF",chartPeriod, 12, 26, 9, 0, 0, j);
-                     usdjpy = iMACD("USDJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     usdjpy = iMACD("USDJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      eurgbp = iMACD("EURGBP",chartPeriod, 12, 26, 9, 0, 0, j);
                      
-                     eurjpy = iMACD("EURJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     eurjpy = iMACD("EURJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      eurchf = iMACD("EURCHF",chartPeriod, 12, 26, 9, 0, 0, j);
                      eurnzd = iMACD("EURNZD",chartPeriod, 12, 26, 9, 0, 0, j);
                      eurcad = iMACD("EURCAD",chartPeriod, 12, 26, 9, 0, 0, j);
@@ -847,20 +850,106 @@ datetime TIME;  //Time index
                      gbpcad = iMACD("GBPCAD",chartPeriod, 12, 26, 9, 0, 0, j);
                      gbpchf = iMACD("GBPCHF",chartPeriod, 12, 26, 9, 0, 0, j);
                      
-                     gbpjpy = iMACD("GBPJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     gbpjpy = iMACD("GBPJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      gbpnzd = iMACD("GBPNZD",chartPeriod, 12, 26, 9, 0, 0, j);
                      audcad = iMACD("AUDCAD",chartPeriod, 12, 26, 9, 0, 0, j);
                      audchf = iMACD("AUDCHF",chartPeriod, 12, 26, 9, 0, 0, j);
                      
-                     audjpy = iMACD("AUDJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     audjpy = iMACD("AUDJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      audnzd = iMACD("AUDNZD",chartPeriod, 12, 26, 9, 0, 0, j);
-                     cadjpy = iMACD("CADJPY",chartPeriod, 12, 26, 9, 0, 0, j);
-                     chfjpy = iMACD("CHFJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     cadjpy = iMACD("CADJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
+                     chfjpy = iMACD("CHFJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      
-                     nzdjpy = iMACD("NZDJPY",chartPeriod, 12, 26, 9, 0, 0, j);
+                     nzdjpy = iMACD("NZDJPY",chartPeriod, 12, 26, 9, 0, 0, j)/100;
                      nzdcad = iMACD("NZDCAD",chartPeriod, 12, 26, 9, 0, 0, j);
                      nzdchf = iMACD("NZDCHF",chartPeriod, 12, 26, 9, 0, 0, j);
                      cadchf = iMACD("CADCHF",chartPeriod, 12, 26, 9, 0, 0, j);
+                     
+                     
+                     data = string(TIME)+","+string(eurusd)+"," + string(gbpusd) + "," +string(audusd)+ "," +string(nzdusd)+ ","
+                                            +string(usdcad)+"," + string(usdchf) + "," +string(usdjpy)+ "," +string(eurgbp)+ ","
+                                            +string(eurjpy)+"," + string(eurchf) + "," +string(eurnzd)+ "," +string(eurcad)+ ","
+                                            +string(euraud)+"," + string(gbpaud) + "," +string(gbpcad)+ "," +string(gbpchf)+ ","
+                                            +string(gbpjpy)+"," + string(gbpnzd) + "," +string(audcad)+ "," +string(audchf)+ ","
+                                            +string(audjpy)+"," + string(audnzd) + "," +string(cadjpy)+ "," +string(chfjpy)+ ","
+                                            +string(nzdjpy)+"," + string(nzdcad) + "," +string(nzdchf)+ "," +string(cadchf);
+                  FileWrite(handle,data);   //write data to the file during each for loop iteration
+                     
+                 }
+               
+               //             
+                FileClose(handle);        //close file when data write is over
+               //---------------------------------------------------------------------------------------------
+         
+  }       
+  
+void writeDataStoch(string filename, int charPer, int barsCollect)
+// function to record 28 currencies pairs Stochastic indicator to the file (file to be used by all R scripts)
+ {
+
+/*
+Pairs = c("EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY",
+                     "EURGBP", "EURJPY", "EURCHF", "EURNZD", "EURCAD", "EURAUD", "GBPAUD",
+                     "GBPCAD", "GBPCHF", "GBPJPY", "GBPNZD", "AUDCAD", "AUDCHF", "AUDJPY",
+                     "AUDNZD", "CADJPY", "CHFJPY", "NZDJPY", "NZDCAD", "NZDCHF", "CADCHF")   
+*/
+
+//---- 28 currencies
+double eurusd, gbpusd, audusd, nzdusd, usdcad, usdchf;
+double eurgbp, eurjpy, eurchf, eurnzd, eurcad, euraud;
+double audchf, audjpy, audnzd, cadchf, cadjpy, chfjpy;
+double gbpaud, gbpcad, gbpchf, gbpjpy, gbpnzd, nzdcad;
+double nzdchf, audcad, usdjpy, nzdjpy;
+             
+string data;    //identifier that will be used to collect data string
+datetime TIME;  //Time index
+               // delete file if it's exist
+               FileDelete(filename);
+               // open file handle
+               int handle = FileOpen(filename,FILE_CSV|FILE_READ|FILE_WRITE);
+                FileSeek(handle,0,SEEK_SET);
+               // generate data now using for loop
+               //----Fill the arrays
+         
+               //loop j calculates surfaces and angles from beginning of the day
+               for(int j = 0; j < barsCollect; j++)    //j scrolls through bars of the day
+                 {
+                     TIME = iTime(Symbol(), chartPeriod, j);  //Time of the bar of the applied chart symbol
+                     //--- calculating close price for every currency
+                     eurusd = iStochastic("EURUSD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     gbpusd = iStochastic("GBPUSD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     audusd = iStochastic("AUDUSD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     nzdusd = iStochastic("NZDUSD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     usdcad = iStochastic("USDCAD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     usdchf = iStochastic("USDCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     usdjpy = iStochastic("USDJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     eurgbp = iStochastic("EURGBP",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     eurjpy = iStochastic("EURJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     eurchf = iStochastic("EURCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     eurnzd = iStochastic("EURNZD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     eurcad = iStochastic("EURCAD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     euraud = iStochastic("EURAUD",chartPeriod,34, 13, 8, 0, 0, 0, j);      
+                     gbpaud = iStochastic("GBPAUD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     gbpcad = iStochastic("GBPCAD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     gbpchf = iStochastic("GBPCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     gbpjpy = iStochastic("GBPJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     gbpnzd = iStochastic("GBPNZD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     audcad = iStochastic("AUDCAD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     audchf = iStochastic("AUDCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     audjpy = iStochastic("AUDJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     audnzd = iStochastic("AUDNZD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     cadjpy = iStochastic("CADJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     chfjpy = iStochastic("CHFJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     
+                     nzdjpy = iStochastic("NZDJPY",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     nzdcad = iStochastic("NZDCAD",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     nzdchf = iStochastic("NZDCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
+                     cadchf = iStochastic("CADCHF",chartPeriod,34, 13, 8, 0, 0, 0, j);
                      
                      
                      data = string(TIME)+","+string(eurusd)+"," + string(gbpusd) + "," +string(audusd)+ "," +string(nzdusd)+ ","
