@@ -21,10 +21,19 @@ https://www.udemy.com/your-trading-robot/?couponCode=LAZYTRADE-GIT
 
 
 extern string  Header1 = "-----EA Main Settings-------";
-extern int     UseBarsHistory        = 7300;
-extern int     UseBarsCollect        = 7200;    
+extern int     UseBarsHistory        = 14300;
+extern int     UseBarsCollect        = 14200;    
 extern int     chartPeriod           = 15; //min
-
+extern bool    CollectClosePrice     = True;
+extern bool    CollectOpenPrice      = False;
+extern bool    CollectLowerPrice     = False;
+extern bool    CollectHigherPrice    = False;
+extern bool    CollectRSI            = False;
+extern bool    CollectBullPower      = False;
+extern bool    CollectBearPower      = False;
+extern bool    CollectATR8           = False;
+extern bool    CollectMACD           = True;
+extern bool    CollectStoch          = False;
 
 string FileNamePrx1 = "AI_CP";
 string FileNamePrx2 = "AI_OP";
@@ -83,26 +92,27 @@ void OnTick()
       Time0 = Time[0];
       //code that only executed in the beginning and once every bar
        //record closed price data
-      writeDataCP(FileNamePrx1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectClosePrice)writeDataCP(FileNamePrx1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record open price data
-      //writeDataOP(FileNamePrx2 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
-      //record high price data
-      //writeDataHP(FileNamePrx3 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectOpenPrice)writeDataOP(FileNamePrx2 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record low price data
-      //writeDataLP(FileNamePrx4 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectLowerPrice)writeDataHP(FileNamePrx3 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      //record high price data
+      if(CollectHigherPrice)writeDataLP(FileNamePrx4 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record rsi indicator data
-      writeDataRSI(FileNameRsi1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectRSI)writeDataRSI(FileNameRsi1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record bull power data
-      //writeDataBullPow(FileNameBull + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBullPower)writeDataBullPow(FileNameBull + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record bear power data
-      //writeDataBearPow(FileNameBear + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBearPower)writeDataBearPow(FileNameBear + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
       //record atr data
-      //writeDataAtr(FileNameAtr1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectATR8)writeDataAtr(FileNameAtr1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
       //record macd data
-      writeDataMacd(FileNameMacd + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectMACD)writeDataMacd(FileNameMacd + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
       //record Stochastic data
-      writeDataStoch(FileNameStoch + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
       }
+      
       
   }
 //+------------------------------------------------------------------+
