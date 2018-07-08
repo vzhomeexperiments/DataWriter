@@ -6,7 +6,7 @@
 
 #property copyright "Copyright 2018, Vladimir Zhbanko"
 #property link      "https://vladdsm.github.io/myblog_attempt/"
-#property version   "4.01"
+#property version   "4.02"
 #property strict
 
 /*
@@ -34,6 +34,7 @@ extern bool    CollectBearPower      = False;
 extern bool    CollectATR8           = False;
 extern bool    CollectMACD           = True;
 extern bool    CollectStoch          = False;
+extern string  DashboardComment      = "Record financial assets data to files"; // change this comment for descriptive purposes
 
 string FileNamePrx1 = "AI_CP";
 string FileNamePrx2 = "AI_OP";
@@ -64,6 +65,36 @@ Content:
 //+------------------------------------------------------------------+
 int OnInit()
   {
+      //useful to generate files when market is closed
+      if(CollectClosePrice)writeDataCP(FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record open price data
+      if(CollectOpenPrice)writeDataOP(FileNamePrx2 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record low price data
+      if(CollectLowerPrice)writeDataHP(FileNamePrx3 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record high price data
+      if(CollectHigherPrice)writeDataLP(FileNamePrx4 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record rsi indicator data
+      if(CollectRSI)writeDataRSI(FileNameRsi1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record bull power data
+      if(CollectBullPower)writeDataBullPow(FileNameBull + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record bear power data
+      if(CollectBearPower)writeDataBearPow(FileNameBear + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record atr data
+      if(CollectATR8)writeDataAtr(FileNameAtr1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+      //record macd data
+      if(CollectMACD)writeDataMacd(FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+      //record Stochastic data
+      if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+            //show dashboard
+      ShowDashboard(DashboardComment, 0,
+                    FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
+                    FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
+                    "..", 0,
+                    "..", 0,
+                    "..", 0,
+                    "..", 0); 
+      
+      
       return(INIT_SUCCEEDED);
   }
 //+------------------------------------------------------------------+
@@ -78,7 +109,7 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick()
   {
-   
+
    // should generate unique time every minute https://www.mql5.com/en/forum/133366
    
       static datetime Time0;
@@ -91,26 +122,34 @@ void OnTick()
       //  record time to variable
       Time0 = Time[0];
       //code that only executed in the beginning and once every bar
-       //record closed price data
-      if(CollectClosePrice)writeDataCP(FileNamePrx1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectClosePrice)writeDataCP(FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record open price data
-      if(CollectOpenPrice)writeDataOP(FileNamePrx2 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectOpenPrice)writeDataOP(FileNamePrx2 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record low price data
-      if(CollectLowerPrice)writeDataHP(FileNamePrx3 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectLowerPrice)writeDataHP(FileNamePrx3 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record high price data
-      if(CollectHigherPrice)writeDataLP(FileNamePrx4 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectHigherPrice)writeDataLP(FileNamePrx4 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record rsi indicator data
-      if(CollectRSI)writeDataRSI(FileNameRsi1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectRSI)writeDataRSI(FileNameRsi1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record bull power data
-      if(CollectBullPower)writeDataBullPow(FileNameBull + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBullPower)writeDataBullPow(FileNameBull + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record bear power data
-      if(CollectBearPower)writeDataBearPow(FileNameBear + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBearPower)writeDataBearPow(FileNameBear + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
       //record atr data
-      if(CollectATR8)writeDataAtr(FileNameAtr1 + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectATR8)writeDataAtr(FileNameAtr1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
       //record macd data
-      if(CollectMACD)writeDataMacd(FileNameMacd + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectMACD)writeDataMacd(FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
       //record Stochastic data
-      if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //show dashboard
+      ShowDashboard(DashboardComment, 0,
+                    FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
+                    FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
+                    "..", 0,
+                    "..", 0,
+                    "..", 0,
+                    "..", 0); 
+         
       }
       
       
@@ -978,3 +1017,59 @@ datetime TIME;  //Time index
                //---------------------------------------------------------------------------------------------
          
   }       
+  
+ //+------------------------------------------------------------------+
+//| Dashboard - Comment Version                                    
+//+------------------------------------------------------------------+
+void ShowDashboard(string Descr0, int magic,
+                   string Descr1, int Param1,
+                   string Descr2, double Param2,
+                   string Descr3, int Param3,
+                   string Descr4, double Param4,
+                   string Descr5, int Param5,
+                   string Descr6, double Param6
+                     ) 
+  {
+// Purpose: This function creates a dashboard showing information on your EA using comments function
+// Type: Customisable 
+// Modify this function to suit your trading robot
+//----
+
+string new_line = "\n"; // "\n" or "\n\n" will move the comment to new line
+string space = ": ";    // generate space
+string underscore = "________________________________";
+
+Comment(
+        new_line 
+      + Descr0 + space + IntegerToString(magic)
+      + new_line
+      + underscore  
+      + new_line 
+      + new_line
+      + Descr1 + space + IntegerToString(Param1)
+      + new_line
+      + Descr2 + space + DoubleToString(Param2, 1)
+      + new_line        
+      + underscore  
+      + new_line 
+      + new_line
+      + Descr3 + space + IntegerToString(Param3)
+      + new_line
+      + Descr4 + space + DoubleToString(Param4, 1)
+      + new_line        
+      + underscore  
+      + new_line 
+      + new_line
+      + Descr5 + space + IntegerToString(Param5)
+      + new_line
+      + Descr6 + space + DoubleToString(Param6, 1)
+      + new_line        
+      + underscore  
+      + "");
+      
+      
+  }
+
+//+------------------------------------------------------------------+
+//| End of Dashboard - Comment Version                                     
+//+------------------------------------------------------------------+   
