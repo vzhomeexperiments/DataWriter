@@ -17,6 +17,10 @@ Pairs = c("EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY",
                      "GBPCAD", "GBPCHF", "GBPJPY", "GBPNZD", "AUDCAD", "AUDCHF", "AUDJPY",
                      "AUDNZD", "CADJPY", "CHFJPY", "NZDJPY", "NZDCAD", "NZDCHF", "CADCHF")   
 					 
+## DataWriter v4.02
+
+Improved code using nested for loops and strings arrays (contributed by @MiguelDaCosta)					 
+					 
 ## DataWriter v5.01
 
 Expert Advisor able to automatically collect close price of the #TeslaMotor stock price
