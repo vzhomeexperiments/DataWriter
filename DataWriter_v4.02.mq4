@@ -186,7 +186,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = ND(iClose(Pairs[c],chartPeriod,j));
+                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
+                     double pairdata = DoubleToString(iClose(Pairs[c],chartPeriod,j), digits);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -220,7 +221,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = ND(iOpen(Pairs[c],chartPeriod,j));
+                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
+                     double pairdata = DoubleToString(iOpen(Pairs[c],chartPeriod,j), digits);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -254,7 +256,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = ND(iHigh(Pairs[c],chartPeriod,j));
+                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
+                     double pairdata = DoubleToString(iHigh(Pairs[c],chartPeriod,j), digits);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -287,7 +290,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = ND(iLow(Pairs[c],chartPeriod,j));
+                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
+                     double pairdata = DoubleToString(iLow(Pairs[c],chartPeriod,j), digits);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -322,7 +326,7 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iRSI(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j);
+                     double pairdata = DoubleToString(iRSI(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -356,7 +360,7 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iBullsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j);
+                     double pairdata = DoubleToString(iBullsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -390,7 +394,7 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iBearsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j);
+                     double pairdata = DoubleToString(iBearsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
                      data = data + ","+string(pairdata);
                   
                      }
@@ -424,7 +428,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iATR(Pairs[c],chartPeriod, 8, j);
+                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
+                     double pairdata = DoubleToString(iATR(Pairs[c],chartPeriod, 8, j), digits);
                      data = data + ","+string(pairdata);
                   
                      }
