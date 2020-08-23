@@ -2,39 +2,38 @@
 //|                                                   DataWriter.mq4 |
 //|                                 Copyright 2018, Vladimir Zhbanko |
 //+------------------------------------------------------------------+
-#include <06_NormalizeDouble.mqh>
 
 #property copyright "Copyright 2018, Vladimir Zhbanko"
 #property link      "https://vladdsm.github.io/myblog_attempt/"
 #property version   "4.02"
 #property strict
-
+#define EANAME "DataWriter_v4.02"
 /*
 PURPOSE: Retrieve price and Indicator data for an asset 
 USE: Data will be used for Decision Support System in R
-WANT TO LEARN HOW TO USE?
+HOW TO USE:
 
-https://www.udemy.com/your-home-trading-environment/?couponCode=LAZYTRADE-GIT
-https://www.udemy.com/your-trading-robot/?couponCode=LAZYTRADE-GIT
+https://www.udemy.com/course/your-home-trading-environment/?referralCode=9EAD4CC112A476678658
+https://www.udemy.com/course/your-trading-robot/?referralCode=529DCD0085D40BEC410C
 
 */
 
 
-extern string  Header1 = "-----EA Main Settings-------";
-extern int     UseBarsHistory        = 14300;
-extern int     UseBarsCollect        = 14200;    
+extern string           Header1 = "-----EA Main Settings-------";
+extern int              UseBarsHistory        = 14300;
+extern int              UseBarsCollect        = 14200;    
 extern ENUM_TIMEFRAMES  chartPeriod           = 15;  // Choose the timeframe to retrive the data
-extern bool    CollectClosePrice     = False;
-extern bool    CollectOpenPrice      = True;
-extern bool    CollectLowerPrice     = False;
-extern bool    CollectHigherPrice    = False;
-extern bool    CollectRSI            = False;
-extern bool    CollectBullPower      = False;
-extern bool    CollectBearPower      = False;
-extern bool    CollectATR8           = False;
-extern bool    CollectMACD           = False;
-extern bool    CollectStoch          = False;
-extern string  DashboardComment      = "Record financial assets data to files"; // change this comment for descriptive purposes
+extern bool             CollectClosePrice     = True;
+extern bool             CollectOpenPrice      = False;
+extern bool             CollectLowerPrice     = False;
+extern bool             CollectHigherPrice    = False;
+extern bool             CollectRSI            = True;
+extern bool             CollectBullPower      = False;
+extern bool             CollectBearPower      = False;
+extern bool             CollectATR8           = False;
+extern bool             CollectMACD           = True;
+extern bool             CollectStoch          = False;
+extern bool             ShowScreenComments    = True;
 
 string FileNamePrx1 = "AI_CP";
 string FileNamePrx2 = "AI_OP";
@@ -47,6 +46,8 @@ string FileNameAtr1 = "AI_Atr8";
 string FileNameMacd = "AI_Macd";
 string FileNameStoch = "AI_Stoch";
 
+string commentText;
+
 string Pairs[] = {"EURUSD","GBPUSD","AUDUSD","NZDUSD","USDCAD","USDCHF","USDJPY","EURGBP",
                   "EURJPY","EURCHF","EURNZD","EURCAD","EURAUD","GBPAUD","GBPCAD","GBPCHF",
                   "GBPJPY","GBPNZD","AUDCAD","AUDCHF","AUDJPY","AUDNZD","CADJPY","CHFJPY",
@@ -57,15 +58,16 @@ string Pairs[] = {"EURUSD","GBPUSD","AUDUSD","NZDUSD","USDCAD","USDCHF","USDJPY"
 /*
 Content:
 
-2. Function writeDataCP          collect Close Price data   
-3. Function writeDataOP          collect Open Price data
-4. Function writeDataLP          collect Low Price data
-5. Function writeDataHP          collect High Price data
-6. Function writeDataRSI         collect Rsi data
-7. Function writeDataBullPow     collect BullPower data
-8. Function writeDataBearPow     collect BearPower data
-9. Function writeDataAtr         collect Atr data
-10.Function writeDataMacd        collect MACD data 
+1. Function writeDataCP          collect Close Price data   
+2. Function writeDataOP          collect Open Price data
+3. Function writeDataLP          collect Low Price data
+4. Function writeDataHP          collect High Price data
+5. Function writeDataRSI         collect Rsi data
+6. Function writeDataBullPow     collect BullPower data
+7. Function writeDataBearPow     collect BearPower data
+8. Function writeDataAtr         collect Atr data
+9. Function writeDataMacd        collect MACD data 
+10.Function writeDataStoch       collect Stoch data 
 */
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
@@ -93,14 +95,8 @@ int OnInit()
       //record Stochastic data
       if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
             //show dashboard
-      ShowDashboard(DashboardComment, 0,
-                    FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
-                    FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
-                    "..", 0,
-                    "..", 0,
-                    "..", 0,
-                    "..", 0); 
       
+      if (ShowScreenComments) Comment("\n Initial files should be written, they will be updated on every new bar ...");
       
       return(INIT_SUCCEEDED);
   }
@@ -126,36 +122,77 @@ void OnTick()
      }
      else
        {
+      //comment
+      commentText = StringConcatenate("\n",EANAME); 
+       
       //  record time to variable
       Time0 = Time[0];
       //code that only executed in the beginning and once every bar
-      if(CollectClosePrice)writeDataCP(FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      //record close price data
+      if(CollectClosePrice)
+         { 
+          writeDataCP(FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv"); 
+         } 
       //record open price data
-      if(CollectOpenPrice)writeDataOP(FileNamePrx2 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectOpenPrice)
+         {
+          writeDataOP(FileNamePrx2 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNamePrx2 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record low price data
-      if(CollectLowerPrice)writeDataHP(FileNamePrx3 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectLowerPrice)
+         {
+          writeDataHP(FileNamePrx3 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNamePrx3 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record high price data
-      if(CollectHigherPrice)writeDataLP(FileNamePrx4 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectHigherPrice)
+         {
+          writeDataLP(FileNamePrx4 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNamePrx4 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record rsi indicator data
-      if(CollectRSI)writeDataRSI(FileNameRsi1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectRSI)
+         {
+          writeDataRSI(FileNameRsi1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameRsi1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record bull power data
-      if(CollectBullPower)writeDataBullPow(FileNameBull + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBullPower)
+         {
+          writeDataBullPow(FileNameBull + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameBull + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record bear power data
-      if(CollectBearPower)writeDataBearPow(FileNameBear + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+      if(CollectBearPower)
+         {
+          writeDataBearPow(FileNameBear + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameBear + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record atr data
-      if(CollectATR8)writeDataAtr(FileNameAtr1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectATR8)
+         {
+          writeDataAtr(FileNameAtr1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameAtr1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record macd data
-      if(CollectMACD)writeDataMacd(FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+      if(CollectMACD)
+         {
+          writeDataMacd(FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);   
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         } 
       //record Stochastic data
-      if(CollectStoch)writeDataStoch(FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
-      //show dashboard
-      ShowDashboard(DashboardComment, 0,
-                    FileNamePrx1 + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
-                    FileNameMacd + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", 0,
-                    "..", 0,
-                    "..", 0,
-                    "..", 0,
-                    "..", 0); 
+      if(CollectStoch)
+         {
+          writeDataStoch(FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv", chartPeriod, UseBarsCollect);
+          commentText = commentText + StringConcatenate("\n","Collecting...", FileNameStoch + string(chartPeriod) + "-" + string(UseBarsCollect) + ".csv");          
+         }
+
+      
+      
+      if(ShowScreenComments) Comment(commentText);
+
          
       }
       
@@ -186,9 +223,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
-                     double pairdata = DoubleToString(iClose(Pairs[c],chartPeriod,j), digits);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iClose(Pairs[c],chartPeriod,j),5);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -221,9 +257,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
-                     double pairdata = DoubleToString(iOpen(Pairs[c],chartPeriod,j), digits);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iOpen(Pairs[c],chartPeriod,j),5);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -256,9 +291,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
-                     double pairdata = DoubleToString(iHigh(Pairs[c],chartPeriod,j), digits);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iHigh(Pairs[c],chartPeriod,j),5);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -290,9 +324,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
-                     double pairdata = DoubleToString(iLow(Pairs[c],chartPeriod,j), digits);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iLow(Pairs[c],chartPeriod,j),5);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -326,8 +359,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = DoubleToString(iRSI(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iRSI(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j),3);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -360,8 +393,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = DoubleToString(iBullsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iBullsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j),5);
+                     data = data + ","+pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -394,8 +427,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = DoubleToString(iBearsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j), 2);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iBearsPower(Pairs[c],chartPeriod, 8, PRICE_MEDIAN, j),5);
+                     data = data + ","+ pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -428,9 +461,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     int digits = MarketInfo(Pairs[c], MODE_DIGITS); 
-                     double pairdata = DoubleToString(iATR(Pairs[c],chartPeriod, 8, j), digits);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iATR(Pairs[c],chartPeriod, 8, j),5);
+                     data = data + ","+ pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -463,8 +495,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iMACD(Pairs[c],chartPeriod, 12, 26, 9, 0, 0, j);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iMACD(Pairs[c],chartPeriod, 12, 26, 9, 0, 0, j),8);
+                     data = data + ","+ pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -497,8 +529,8 @@ datetime TIME;  //Time index
                     
                    for(int c = 0; c < ArraySize(Pairs); c++)
                     {
-                     double pairdata = iStochastic(Pairs[c],chartPeriod,34, 13, 8, 0, 0, 0, j);
-                     data = data + ","+string(pairdata);
+                     string pairdata = DoubleToStr(iStochastic(Pairs[c],chartPeriod,34, 13, 8, 0, 0, 0, j),8);
+                     data = data + "," + pairdata;
                   
                      }
                      FileWrite(handle,data);   //write data to the file during each for loop iteration
@@ -510,58 +542,3 @@ datetime TIME;  //Time index
          
   }       
   
- //+------------------------------------------------------------------+
-//| Dashboard - Comment Version                                    
-//+------------------------------------------------------------------+
-void ShowDashboard(string Descr0, int magic,
-                   string Descr1, int Param1,
-                   string Descr2, double Param2,
-                   string Descr3, int Param3,
-                   string Descr4, double Param4,
-                   string Descr5, int Param5,
-                   string Descr6, double Param6
-                     ) 
-  {
-// Purpose: This function creates a dashboard showing information on your EA using comments function
-// Type: Customisable 
-// Modify this function to suit your trading robot
-//----
-
-string new_line = "\n"; // "\n" or "\n\n" will move the comment to new line
-string space = ": ";    // generate space
-string underscore = "________________________________";
-
-Comment(
-        new_line 
-      + Descr0 + space + IntegerToString(magic)
-      + new_line
-      + underscore  
-      + new_line 
-      + new_line
-      + Descr1 + space + IntegerToString(Param1)
-      + new_line
-      + Descr2 + space + DoubleToString(Param2, 1)
-      + new_line        
-      + underscore  
-      + new_line 
-      + new_line
-      + Descr3 + space + IntegerToString(Param3)
-      + new_line
-      + Descr4 + space + DoubleToString(Param4, 1)
-      + new_line        
-      + underscore  
-      + new_line 
-      + new_line
-      + Descr5 + space + IntegerToString(Param5)
-      + new_line
-      + Descr6 + space + DoubleToString(Param6, 1)
-      + new_line        
-      + underscore  
-      + "");
-      
-      
-  }
-
-//+------------------------------------------------------------------+
-//| End of Dashboard - Comment Version                                     
-//+-------------------------------------------------------
