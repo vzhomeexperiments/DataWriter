@@ -25,6 +25,14 @@ Improved code using nested for loops and strings arrays (contributed by @MiguelD
 
 Expert Advisor able to automatically collect close price of the #TeslaMotor stock price
 					 
+
+## DataWriter v6.01 [Prototype]
+
+Expert Advisor collecting several indicator data to build Deep Learning regression models:
+
+* Several indicators
+* Each Pair has it's own output
+					 
 # Reference
 
 Curious how to apply this Robot? Join these UDEMY courses with a discount!
