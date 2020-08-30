@@ -166,13 +166,13 @@ void OnTick()
             
             if (IsTesting()== true)
                {
-               collectAndWrite(Symbol(), FileNameMix+Symbol()+".csv", chartPeriod, UseBarsCollect);
+               collectAndWrite(Symbol(), FileNameMix+Symbol()+IntegerToString(chartPeriod)+".csv", chartPeriod, UseBarsCollect);
                }
                
             if (IsTesting()== false) 
                {
                for(int c = 0; c < ArraySize(pairs); c++)
-                     {collectAndWrite(pairs[c],FileNameMix+pairs[c]+".csv", chartPeriod, UseBarsCollect);
+                     {collectAndWrite(pairs[c],FileNameMix+pairs[c]+IntegerToString(chartPeriod)+".csv", chartPeriod, UseBarsCollect);
                      if (ShowScreenComments) Comment(commentText); }
                }
             
@@ -206,10 +206,10 @@ datetime TIME;  //Time index
                    TIME = iTime(symboll, charPer1, j);  //Time of the bar of the applied chart symbol
                    data = string(TIME); 
                     
-                     string ind[16];
+                     string ind[18];
                      
                      ind[0]  = DoubleToStr(iClose(symboll,charPer1,j),5);
-                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+21),5);
+                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+34),5);
                      ind[2]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j),3);
                      ind[3]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+2),3);
                      ind[4]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+3),3);
@@ -217,13 +217,15 @@ datetime TIME;  //Time index
                      ind[6]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+8),3);
                      ind[7]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+13),3);
                      ind[8]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+21),3);
-                     ind[9]  = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),3);
-                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),3);
-                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),3);
-                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),3);
-                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),3);
-                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),3);
-                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),3);
+                     ind[9]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+34),3);
+                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),3);
+                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),3);
+                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),3);
+                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),3);
+                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),3);
+                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),3);
+                     ind[16] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),3);
+                     ind[17] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+34),3);
                      
                      for(int i=0;i<ArraySize(ind);i++) data = data + ","+ind[i];   
                      
