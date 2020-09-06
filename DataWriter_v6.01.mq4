@@ -190,6 +190,10 @@ void OnTick()
 void collectAndWrite(string symboll, string filename, int charPer1, int barsCollect)
 // function to record 28 currencies pairs close price to the file (file to be used by all R scripts)
  {
+ 
+ int digits = MarketInfo(symboll, MODE_DIGITS);
+ 
+ 
 string data;    //identifier that will be used to collect data string
 datetime TIME;  //Time index
                // delete file if it's exist
@@ -208,24 +212,24 @@ datetime TIME;  //Time index
                     
                      string ind[18];
                      
-                     ind[0]  = DoubleToStr(iClose(symboll,charPer1,j),5);
-                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+34),5);
-                     ind[2]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j),3);
-                     ind[3]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+2),3);
-                     ind[4]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+3),3);
-                     ind[5]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+5),3);
-                     ind[6]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+8),3);
-                     ind[7]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+13),3);
-                     ind[8]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+21),3);
-                     ind[9]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+34),3);
-                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),3);
-                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),3);
-                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),3);
-                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),3);
-                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),3);
-                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),3);
-                     ind[16] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),3);
-                     ind[17] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+34),3);
+                     ind[0]  = DoubleToStr(iClose(symboll,charPer1,j),digits);
+                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+34),digits);
+                     ind[2]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j),digits);
+                     ind[3]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+2),digits);
+                     ind[4]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+3),digits);
+                     ind[5]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+5),digits);
+                     ind[6]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+8),digits);
+                     ind[7]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+13),digits);
+                     ind[8]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+21),digits);
+                     ind[9]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+34),digits);
+                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),digits);
+                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),digits);
+                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),digits);
+                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),digits);
+                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),digits);
+                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),digits);
+                     ind[16] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),digits);
+                     ind[17] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+34),digits);
                      
                      for(int i=0;i<ArraySize(ind);i++) data = data + ","+ind[i];   
                      
