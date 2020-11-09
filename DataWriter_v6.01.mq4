@@ -61,6 +61,7 @@ string FileNameMacd = "AI_Macd";
 string FileNameStoch = "AI_Stoch";
 
 string FileNameMix = "AI_RSIADX";
+string FileTick = StringConcatenate("TickSize_",FileNameMix,".csv");
 
 string commentText;
 
@@ -128,7 +129,7 @@ int OnInit()
  
    if(ArraySize(pairs) <= 0){Print("No pairs to trade");return(INIT_FAILED);}
       
-      
+     collectTickSize (FileTick);  
             //show dashboard
       
       if (ShowScreenComments) Comment("\n Initial files should be written, they will be updated on every new bar ...");
@@ -149,6 +150,7 @@ void OnTick()
   {
 
    // should generate unique time every minute https://www.mql5.com/en/forum/133366
+
    
       static datetime Time0;
    if(Time0 == Time[0])
@@ -190,6 +192,10 @@ void OnTick()
 void collectAndWrite(string symboll, string filename, int charPer1, int barsCollect)
 // function to record 28 currencies pairs close price to the file (file to be used by all R scripts)
  {
+ 
+ int digits = MarketInfo(symboll, MODE_DIGITS);
+ 
+ 
 string data;    //identifier that will be used to collect data string
 datetime TIME;  //Time index
                // delete file if it's exist
@@ -208,24 +214,24 @@ datetime TIME;  //Time index
                     
                      string ind[18];
                      
-                     ind[0]  = DoubleToStr(iClose(symboll,charPer1,j),5);
-                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+34),5);
-                     ind[2]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j),3);
-                     ind[3]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+2),3);
-                     ind[4]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+3),3);
-                     ind[5]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+5),3);
-                     ind[6]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+8),3);
-                     ind[7]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+13),3);
-                     ind[8]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+21),3);
-                     ind[9]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+34),3);
-                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),3);
-                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),3);
-                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),3);
-                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),3);
-                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),3);
-                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),3);
-                     ind[16] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),3);
-                     ind[17] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+34),3);
+                     ind[0]  = DoubleToStr(iClose(symboll,charPer1,j),digits);
+                     ind[1]  = DoubleToStr(iClose(symboll,charPer1,j+34),digits);
+                     ind[2]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j),digits);
+                     ind[3]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+2),digits);
+                     ind[4]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+3),digits);
+                     ind[5]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+5),digits);
+                     ind[6]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+8),digits);
+                     ind[7]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+13),digits);
+                     ind[8]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+21),digits);
+                     ind[9]  = DoubleToStr(iRSI(symboll,charPer1, 8, PRICE_MEDIAN, j+34),digits);
+                     ind[10] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j),digits);
+                     ind[11] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+2),digits);
+                     ind[12] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+3),digits);
+                     ind[13] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+5),digits);
+                     ind[14] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+8),digits);
+                     ind[15] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+13),digits);
+                     ind[16] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+21),digits);
+                     ind[17] = DoubleToStr(iADX(symboll,charPer1, 8,PRICE_MEDIAN, MODE_MAIN,j+34),digits);
                      
                      for(int i=0;i<ArraySize(ind);i++) data = data + ","+ind[i];   
                      
@@ -239,3 +245,29 @@ datetime TIME;  //Time index
   }
         
 
+void collectTickSize( string filename)
+// function to record 28 currencies pairs close price to the file (file to be used by all R scripts)
+ {
+ 
+ 
+string data;    //identifier that will be used to collect data string
+
+               // delete file if it's exist
+               FileDelete(filename);
+               // open file handle
+               int handle = FileOpen(filename,FILE_CSV|FILE_READ|FILE_WRITE);
+                FileSeek(handle,0,SEEK_SET);
+               // generate data now using for loop
+               //----Fill the arrays
+                     for(int c = 0; c < ArraySize(pairs); c++)
+                     {
+                        string ind  = DoubleToStr(MarketInfo(pairs[c],MODE_TICKSIZE),5);
+                        data = pairs[c] + ","+ind;   
+                        FileWrite(handle,data);   //write data to the file during each for loop iteration
+                }
+               
+               //             
+                FileClose(handle);        //close file when data write is over
+               //---------------------------------------------------------------------------------------------
+         
+  }
