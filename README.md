@@ -8,6 +8,16 @@ https://vladdsm.github.io/myblog_attempt/topics/lazy%20trading/
 
 Various Expert Advisors that will record financial data from the asset to MT4 Sandbox. Data will be then separately analyzed to build models or used for price change prediction.
 
+# Synchronize or Deploy
+
+## Setup Environmental Variables
+
+Add these User Environmental Variables:
+
+PATH_T2_E - path to Development Terminal MT4, folder *\MQL4\Experts
+PATH_T1_E, PATH_T3_E, etc - paths to the Terminals where all other terminals are located
+PATH_DSS_Repo - path to the folder where this repository is stored on the local computer
+
 ## DataWriter v4.01
 
 Expert Advisor able to automatically collect indicators values for 28 major currency pairs.
